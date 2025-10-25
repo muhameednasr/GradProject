@@ -1,0 +1,25 @@
+<div class="items-container">
+  <h2>Available Items</h2>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading items...</div>
+
+  <div *ngIf="!loading && items.length === 0" class="empty-state">
+    <p>No items found in inventory.</p>
+  </div>
+
+  <div class="items-grid">
+    <div *ngFor="let item of items" class="item-card">
+      <div class="item-icon">📦</div>
+      <div class="item-id">#{{ item.id }}</div>
+      <h3 class="item-name">{{ item.name }}</h3>
+      <div class="item-price">
+        <span class="price-label">Price:</span>
+        <span class="price-value">${{ item.price.toFixed(2) }}</span>
+      </div>
+    </div>
+  </div>
+</div>

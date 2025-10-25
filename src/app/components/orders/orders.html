@@ -1,0 +1,64 @@
+<div class="orders-container">
+  <div class="header">
+    <h2>Orders</h2>
+  <button class="btn-primary" [routerLink]="['/orders/new']">
+      Create New Order
+    </button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading orders...</div>
+
+  <div *ngIf="!loading && orders.length === 0" class="empty-state">
+    <p>No orders found. Create your first order!</p>
+  </div>
+
+  <div class="orders-grid">
+    <div *ngFor="let order of orders" class="order-card">
+      <div class="order-header">
+        <div>
+          <h3>Order #{{ order.id }}</h3>
+          <p class="order-date">{{ order.orderDate | date: 'medium' }}</p>
+        </div>
+        <div class="order-actions">
+          <button (click)="toggleOrderDetails(order.id)" class="btn-icon" title="View Details">
+            👁️
+          </button>
+          <button (click)="deleteOrder(order.id)" class="btn-icon btn-danger" title="Delete">
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <div class="order-info">
+        <div class="info-item">
+          <span class="label">Customer:</span>
+          <span class="value">{{ order.customerName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Cashier:</span>
+          <span class="value">{{ order.cashierName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Status:</span>
+          <span class="badge badge-status">{{ order.status }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Total:</span>
+          <span class="value total">${{ order.total.toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="isOrderExpanded(order.id)" class="order-items">
+        <h4>Order Items:</h4>
+        <div *ngFor="let item of order.items" class="item-row">
+          <span>{{ item.name }} x {{ item.quantity }}</span>
+          <span class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
