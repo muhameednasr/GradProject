@@ -24,6 +24,9 @@ export class OrderFormComponent implements OnInit {
     status: 'Pending',
     customerId: 1,
     cashierId: 2,
+    captainId: 1,
+    waiterId: 1,
+    tableId: 1,
     orderItems: []
   };
 
