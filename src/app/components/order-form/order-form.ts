@@ -19,7 +19,9 @@ export class OrderFormComponent implements OnInit {
   items: Item[] = [];
   loading = false;
   error = '';
-  users: User[] = [];
+  cashiers: User[] = [];
+  captains: User[] = [];
+  waiters: User[] = [];
   order: CreateOrderRequest = {
     status: 'Pending',
     customerId: 1,
@@ -39,6 +41,9 @@ export class OrderFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadItems();
+    this.loadCashiers();
+    this.loadCaptains();
+    this.loadWaiters();
   }
 
   loadItems(): void {
@@ -53,10 +58,32 @@ export class OrderFormComponent implements OnInit {
     });
   }
 
-  loadUsers(): void {
-    this.userService.getUsers().subscribe({
+  loadCashiers(): void {
+    this.userService.getCashiers().subscribe({
       next: (data) => {
-        this.users = data;
+        this.cashiers = data;
+      },
+      error: (err) => {
+        this.error = 'failed to load users';
+        console.error(err);
+      },
+    });
+  }
+  loadWaiters(): void {
+    this.userService.getWaiters().subscribe({
+      next: (data) => {
+        this.waiters = data;
+      },
+      error: (err) => {
+        this.error = 'failed to load users';
+        console.error(err);
+      },
+    });
+  }
+  loadCaptains(): void {
+    this.userService.getCaptains().subscribe({
+      next: (data) => {
+        this.captains = data;
       },
       error: (err) => {
         this.error = 'failed to load users';

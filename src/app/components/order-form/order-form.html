@@ -16,8 +16,8 @@
       <div class="form-group">
         <label for="cashierId">Cashier</label>
         <select id="cashierId" [(ngModel)]="order.cashierId" name="cashierId" required class="form-control">
-          <option value="" disabled selected>-- اختر الكاشير --</option>
-          <option *ngFor="let cashier of users" [value]="cashier.id">
+          <option value="" disabled selected>--choose cashier--</option>
+          <option *ngFor="let cashier of cashiers" [value]="cashier.id">
             {{ cashier.name }}
           </option>
         </select>

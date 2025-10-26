@@ -18,4 +18,10 @@ export class UserService {
   getCashiers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/Cahier`);
   }
+  getCaptains(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/Captain`);
+  }
+  getWaiters(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/Waiter`);
+  }
 }
