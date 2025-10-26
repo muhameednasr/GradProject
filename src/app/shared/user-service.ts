@@ -16,7 +16,7 @@ export class UserService {
   }
 
   getCashiers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/Cahier`);
+    return this.http.get<User[]>(`${this.baseUrl}/Cashier`);
   }
   getCaptains(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/Captain`);
