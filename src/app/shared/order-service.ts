@@ -4,10 +4,11 @@ import { Observable } from 'rxjs';
 import { CreateOrderRequest, Order } from '../models/order';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
-  private apiUrl = `https://localhost:7066/api/Order`;
+  // private apiUrl = `https://localhost:7066/api/Order`;
+  private apiUrl = `http://localhost:5271/api/Order`;
 
   constructor(private http: HttpClient) {}
 
@@ -31,3 +32,5 @@ export class OrderService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
+// private _total$ = new BehaviorSubject<number>(0);
+// readonly total$: Observable<number> = this._total$.asObservable();
