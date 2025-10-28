@@ -1,0 +1,50 @@
+<div class="form-container">
+  <h2>Update Order #{{orderId}}</h2>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Loading...
+  </div>
+
+  <div *ngIf="!loading && order?.orderItems?.length" class="order-items">
+    <h3>Order Items</h3>
+    <div class="items-list">
+      <div *ngFor="let item of order.orderItems" class="order-item">
+        <div class="item-details">
+          <span class="item-name">{{item.name || item.item?.name || 'Unknown Item'}}</span>
+          <span class="item-quantity">x {{item.quantity}}</span>
+          <span class="item-price">${{item.price || item.item?.price | number:'1.2-2'}}</span>
+        </div>
+
+        <div class="item-actions">
+          <select [ngModel]="getSizeCode(item.sizeId)" (ngModelChange)="updateItemSize(item.itemId, $event)"
+            [disabled]="item.isPayed" class="form-control size-select" [name]="'size-' + item.itemId">
+            <option [value]="null" disabled>Select Size</option>
+            <option *ngFor="let size of availableSizes" [value]="size">
+              {{getSizeLabel(size)}}
+            </option>
+          </select>
+
+          <button *ngIf="!item.isPayed" (click)="payForItem(item.itemId)" class="btn-pay" [disabled]="loading">
+            Pay Item
+          </button>
+          <span *ngIf="item.isPayed" class="paid-badge">Paid</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-total" *ngIf="order.total">
+      <div class="total-row">
+        <span>Total Amount:</span>
+        <span>${{order.total | number:'1.2-2'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button (click)="back()" class="btn-secondary" [disabled]="loading">Back</button>
+  </div>
+</div>

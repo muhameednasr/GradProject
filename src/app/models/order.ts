@@ -25,5 +25,6 @@ export interface CreateOrderRequest {
     itemId: number;
     quantity: number;
     sizeId: number;
+    isPayed?: boolean; // ADD THIS if you want pay functionality
   }>;
 }

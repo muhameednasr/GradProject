@@ -1,0 +1,79 @@
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.order-items {
+  margin: 20px 0;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.item-details {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.item-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.size-select {
+  padding: 5px;
+  border-radius: 4px;
+  min-width: 100px;
+}
+
+.btn-pay {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-pay:hover {
+  background-color: #45a049;
+}
+
+.paid-badge {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.alert-error {
+  background-color: #f44336;
+  color: white;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
