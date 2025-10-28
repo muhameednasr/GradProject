@@ -5,18 +5,28 @@
     {{ error }}
   </div>
 
-  <form (ngSubmit)="submitOrder()" class="order-form">
+  <form (ngSubmit)="submitOrder()" #orderForm="ngForm" class="order-form">
     <div class="form-grid">
       <div class="form-group">
         <label for="customerId">Customer ID</label>
-        <input type="number" id="customerId" [(ngModel)]="order.customerId" name="customerId" required
+        <input
+          type="number"
+          id="customerId"
+          [(ngModel)]="order.customerId"
+          name="customerId"
+          required
           class="form-control" />
       </div>
 
       <div class="form-group">
-        <label for="cashierId">Cashier</label>
-        <select id="cashierId" [(ngModel)]="order.cashierId" name="cashierId" required class="form-control">
-          <option value="" disabled selected>--choose cashier--</option>
+        <label for="cashierId">Cashier *</label>
+        <select
+          id="cashierId"
+          [(ngModel)]="order.cashierId"
+          name="cashierId"
+          required
+          class="form-control">
+          <option value="" disabled>--choose cashier--</option>
           <option *ngFor="let cashier of cashiers" [value]="cashier.id">
             {{ cashier.name }}
           </option>
@@ -24,9 +34,14 @@
       </div>
 
       <div class="form-group">
-        <label for="captainId">Captain</label>
-        <select id="captainId" [(ngModel)]="order.captainId" name="captainId" required class="form-control">
-          <option value="" disabled selected>--choose captain--</option>
+        <label for="captainId">Captain *</label>
+        <select
+          id="captainId"
+          [(ngModel)]="order.captainId"
+          name="captainId"
+          required
+          class="form-control">
+          <option value="" disabled>--choose captain--</option>
           <option *ngFor="let captain of captains" [value]="captain.id">
             {{ captain.name }}
           </option>
@@ -34,59 +49,106 @@
       </div>
 
       <div class="form-group">
-        <label for="waiterId">Waiter</label>
-        <select id="waiterId" [(ngModel)]="order.waiterId" name="waiterId" required class="form-control">
-          <option value="" disabled selected>--choose waiter--</option>
+        <label for="waiterId">Waiter *</label>
+        <select
+          id="waiterId"
+          [(ngModel)]="order.waiterId"
+          name="waiterId"
+          required
+          class="form-control">
+          <option value="" disabled>--choose waiter--</option>
           <option *ngFor="let waiter of waiters" [value]="waiter.id">
             {{ waiter.name }}
           </option>
         </select>
       </div>
-      <div>
-        <label for="tableId">Table ID</label>
-        <input type="number" id="tableId" [(ngModel)]="order.tableId" name="tableId" required class="form-control" />
+
+      <div class="form-group">
+        <label for="tableId">Table ID *</label>
+        <input
+          type="number"
+          id="tableId"
+          [(ngModel)]="order.tableId"
+          name="tableId"
+          required
+          class="form-control" />
       </div>
+
       <div class="form-group">
         <label for="status">Status</label>
-        <input type="text" id="status" [(ngModel)]="order.status" name="status" required class="form-control" />
+        <input
+          type="text"
+          id="status"
+          [(ngModel)]="order.status"
+          name="status"
+          required
+          class="form-control" />
       </div>
+    </div>
 
-
-      <div class="section">
-        <h3>Add Items</h3>
-        <div class="items-grid">
-          <div *ngFor="let item of items" class="item-select-card">
-            <div class="item-info">
-              <span class="item-name">{{ item.name }}</span>
-              <span class="item-price">${{ item.price.toFixed(2) }}</span>
-            </div>
-            <button type="button" (click)="addItem(item.id)" class="btn-add">
-              Add
-            </button>
+    <div class="section">
+      <h3>Add Items</h3>
+      <div class="items-grid">
+        <div *ngFor="let item of items" class="item-select-card">
+          <div class="item-info">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-price">${{ item.price.toFixed(2) }}</span>
           </div>
+          <button type="button" (click)="addItem(item.id)" class="btn-add">
+            Add
+          </button>
         </div>
       </div>
+    </div>
 
-      <div *ngIf="order.orderItems.length > 0" class="section">
-        <h3>Order Items</h3>
-        <div class="selected-items">
-          <div *ngFor="let orderItem of order.orderItems" class="selected-item">
-            <span>{{ getItemName(orderItem.itemId) }} x {{ orderItem.quantity }}</span>
-            <button type="button" (click)="removeItem(orderItem.itemId)" class="btn-remove">
-              Remove
-            </button>
+    <div *ngIf="tempOrderItems.length > 0" class="section">
+      <h3>Order Items ({{ tempOrderItems.length }})</h3>
+      <div class="selected-items">
+        <div *ngFor="let orderItem of tempOrderItems; let i = index" class="selected-item">
+          <div class="item-details">
+            <span class="item-text">{{ getItemName(orderItem.itemId) }} x {{ orderItem.quantity }}</span>
           </div>
+
+          <div class="form-group size-group">
+            <label [for]="'SizeId-' + i">Size *</label>
+            <select
+              [id]="'SizeId-' + i"
+              [(ngModel)]="orderItem.code"
+              [name]="'SizeId-' + i"
+              required
+              class="form-control">
+              <option value="" disabled>--choose Size--</option>
+              <option *ngFor="let size of availableSizes" [value]="size">
+                {{ getSizeLabel(size) }}
+              </option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            (click)="removeItem(orderItem.itemId)"
+            class="btn-remove"
+            title="Remove item">
+            Remove
+          </button>
         </div>
       </div>
+    </div>
 
-      <div class="form-actions">
-        <button type="submit" [disabled]="loading" class="btn-primary">
-          {{ loading ? 'Creating...' : 'Create Order' }}
-        </button>
-        <button type="button" (click)="cancel()" class="btn-secondary">
-          Cancel
-        </button>
-      </div>
+    <div class="form-actions">
+      <button
+        type="submit"
+        [disabled]="loading || !orderForm.valid"
+        class="btn-primary">
+        {{ loading ? 'Creating...' : 'Create Order' }}
+      </button>
+      <button
+        type="button"
+        (click)="cancel()"
+        class="btn-secondary"
+        [disabled]="loading">
+        Cancel
+      </button>
     </div>
   </form>
 </div>

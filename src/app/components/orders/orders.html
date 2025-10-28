@@ -1,7 +1,7 @@
 <div class="orders-container">
   <div class="header">
     <h2>Orders</h2>
-  <button class="btn-primary" [routerLink]="['/orders/new']">
+    <button class="btn-primary" [routerLink]="['/orders/new']">
       Create New Order
     </button>
   </div>
@@ -42,15 +42,15 @@
           <span class="label">Cashier:</span>
           <span class="value">{{ order.cashierName }}</span>
         </div>
-         <div class="info-item">
+        <div class="info-item">
           <span class="label">Captain:</span>
           <span class="value">{{ order.captainName }}</span>
         </div>
-         <div class="info-item">
+        <div class="info-item">
           <span class="label">Waiter:</span>
           <span class="value">{{ order.waiterName }}</span>
         </div>
-         <div class="info-item">
+        <div class="info-item">
           <span class="label">Table:</span>
           <span class="value">{{ order.tableId }} : {{order.area}}</span>
         </div>
@@ -67,6 +67,7 @@
       <div *ngIf="isOrderExpanded(order.id)" class="order-items">
         <h4>Order Items:</h4>
         <div *ngFor="let item of order.items" class="item-row">
+          <!-- <span style="color: green;">Size :{{item.}}</span> -->
           <span>{{ item.name }} x {{ item.quantity }}</span>
           <span class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</span>
         </div>

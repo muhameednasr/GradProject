@@ -18,11 +18,12 @@ export interface CreateOrderRequest {
   status: string;
   customerId: number;
   cashierId: number;
-  captainId:number;
-  waiterId:number;
+  captainId: number;
+  waiterId: number;
   tableId: number;
   orderItems: Array<{
     itemId: number;
     quantity: number;
+    sizeId: number;
   }>;
 }

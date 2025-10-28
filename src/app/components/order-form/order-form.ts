@@ -11,9 +11,10 @@ import { User } from '../../models/user';
 
 @Component({
   selector: 'app-order-form',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './order-form.html',
-  styleUrl: './order-form.css',
+  styleUrls: ['./order-form.css'],
 })
 export class OrderFormComponent implements OnInit {
   items: Item[] = [];
@@ -22,6 +23,15 @@ export class OrderFormComponent implements OnInit {
   cashiers: User[] = [];
   captains: User[] = [];
   waiters: User[] = [];
+  availableSizes: string[] = ['S', 'M', 'L'];
+
+  // Temporary order items for UI (includes code as string)
+  tempOrderItems: Array<{
+    itemId: number;
+    quantity: number;
+    code: string;
+  }> = [];
+
   order: CreateOrderRequest = {
     status: 'Pending',
     customerId: 1,
@@ -64,69 +74,120 @@ export class OrderFormComponent implements OnInit {
         this.cashiers = data;
       },
       error: (err) => {
-        this.error = 'failed to load users';
+        this.error = 'Failed to load cashiers';
         console.error(err);
       },
     });
   }
+
   loadWaiters(): void {
     this.userService.getWaiters().subscribe({
       next: (data) => {
         this.waiters = data;
       },
       error: (err) => {
-        this.error = 'failed to load users';
+        this.error = 'Failed to load waiters';
         console.error(err);
       },
     });
   }
+
   loadCaptains(): void {
     this.userService.getCaptains().subscribe({
       next: (data) => {
         this.captains = data;
       },
       error: (err) => {
-        this.error = 'failed to load users';
+        this.error = 'Failed to load captains';
         console.error(err);
       },
     });
   }
 
   addItem(itemId: number): void {
-    const existingItem = this.order.orderItems.find((oi) => oi.itemId === itemId);
+    const existingItem = this.tempOrderItems.find((oi) => oi.itemId === itemId);
 
     if (existingItem) {
       existingItem.quantity++;
     } else {
-      this.order.orderItems.push({ itemId, quantity: 1 });
+      this.tempOrderItems.push({
+        itemId,
+        quantity: 1,
+        code: '', // Initialize as empty string
+      });
     }
   }
 
   removeItem(itemId: number): void {
-    this.order.orderItems = this.order.orderItems.filter((oi) => oi.itemId !== itemId);
+    this.tempOrderItems = this.tempOrderItems.filter((oi) => oi.itemId !== itemId);
   }
 
   getItemName(itemId: number): string {
     return this.items.find((i) => i.id === itemId)?.name || '';
   }
 
+  getSizeLabel(code: string): string {
+    const sizeLabels: { [key: string]: string } = {
+      S: 'Small',
+      M: 'Medium',
+      L: 'Large',
+    };
+    return sizeLabels[code] || code;
+  }
+
+  getSizeId(code: string): number {
+    const sizeMap: { [key: string]: number } = {
+      S: 1,
+      M: 2,
+      L: 3,
+    };
+    return sizeMap[code] || 2; // Default to Medium
+  }
+
   submitOrder(): void {
-    if (this.order.orderItems.length === 0) {
+    // Validate order has items
+    if (this.tempOrderItems.length === 0) {
       this.error = 'Please add at least one item to the order.';
+      return;
+    }
+
+    // Validate all items have sizes
+    const allItemsHaveSize = this.tempOrderItems.every((item) => item.code && item.code !== '');
+
+    if (!allItemsHaveSize) {
+      this.error = 'Please select size for all items.';
       return;
     }
 
     this.loading = true;
     this.error = '';
 
-    this.orderService.create(this.order).subscribe({
-      next: () => {
+    // Create the order payload with sizeId
+    const orderPayload: CreateOrderRequest = {
+      status: this.order.status,
+      customerId: this.order.customerId,
+      cashierId: this.order.cashierId,
+      captainId: this.order.captainId,
+      waiterId: this.order.waiterId,
+      tableId: this.order.tableId,
+      orderItems: this.tempOrderItems.map((item) => ({
+        itemId: item.itemId,
+        quantity: item.quantity,
+        sizeId: this.getSizeId(item.code), // Convert code to sizeId for backend
+      })),
+    };
+
+    console.log('Sending order:', orderPayload);
+
+    this.orderService.create(orderPayload).subscribe({
+      next: (response) => {
+        console.log('Order created successfully:', response);
         this.router.navigate(['/orders']);
       },
       error: (err) => {
-        this.error = 'Failed to create order.';
+        console.error('Error creating order:', err);
+        this.error = err.error?.message || err.message || 'Failed to create order.';
         this.loading = false;
-        console.error(err);
       },
     });
   }
