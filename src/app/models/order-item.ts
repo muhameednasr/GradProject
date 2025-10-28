@@ -3,12 +3,12 @@ export interface OrderItem {
   quantity: number;
   name?: string;
   price?: number;
-  code?: string;
+  sizeId?: string;
 }
 
 export interface OrderItemResponse {
   name: string;
   quantity: number;
   price: number;
-  code: string;
+  sizeId: string;
 }

@@ -29,7 +29,7 @@ export class OrderFormComponent implements OnInit {
   tempOrderItems: Array<{
     itemId: number;
     quantity: number;
-    code: string;
+    sizeId: string;
   }> = [];
 
   order: CreateOrderRequest = {
@@ -113,7 +113,7 @@ export class OrderFormComponent implements OnInit {
       this.tempOrderItems.push({
         itemId,
         quantity: 1,
-        code: '', // Initialize as empty string
+        sizeId: '', // Initialize as empty string
       });
     }
   }
@@ -152,7 +152,7 @@ export class OrderFormComponent implements OnInit {
     }
 
     // Validate all items have sizes
-    const allItemsHaveSize = this.tempOrderItems.every((item) => item.code && item.code !== '');
+    const allItemsHaveSize = this.tempOrderItems.every((item) => item.sizeId && item.sizeId !== '');
 
     if (!allItemsHaveSize) {
       this.error = 'Please select size for all items.';
@@ -173,7 +173,7 @@ export class OrderFormComponent implements OnInit {
       orderItems: this.tempOrderItems.map((item) => ({
         itemId: item.itemId,
         quantity: item.quantity,
-        sizeId: this.getSizeId(item.code), // Convert code to sizeId for backend
+        sizeId: this.getSizeId(item.sizeId), // Convert code to sizeId for backend
       })),
     };
 
