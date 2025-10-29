@@ -21,6 +21,12 @@ export class OrderService {
   }
 
   create(order: CreateOrderRequest): Observable<Order> {
+    console.log('Request URL:', this.apiUrl);
+    console.log('Request Headers:', {
+      'Content-Type': 'application/json',
+    });
+    console.log('Request Payload:', JSON.stringify(order, null, 2));
+
     return this.http.post<Order>(this.apiUrl, order);
   }
 

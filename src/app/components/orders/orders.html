@@ -21,7 +21,7 @@
       <div class="order-header">
         <div>
           <h3>Order #{{ order.id }}</h3>
-          <p class="order-date">{{ order.orderDate | date: 'medium' }}</p>
+          <p class="order-date">{{ order.date | date: 'medium' }}</p>
         </div>
         <div class="order-actions">
           <button (click)="toggleOrderDetails(order.id)" class="btn-icon" title="View Details">
@@ -63,16 +63,16 @@
         </div>
         <div class="info-item">
           <span class="label">Total:</span>
-          <span class="value total">${{ order.total.toFixed(2) }}</span>
+          <span class="value total">${{ order.total }}</span>
         </div>
       </div>
 
       <div *ngIf="isOrderExpanded(order.id)" class="order-items">
         <h4>Order Items:</h4>
-        <div *ngFor="let item of order.items" class="item-row">
+        <div *ngFor="let item of order.orderItems" class="item-row">
           <!-- <span style="color: green;">Size :{{item.}}</span> -->
           <span>{{ item.name }} x {{ item.quantity }}</span>
-          <span class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</span>
+          <span class="item-price">${{ (item.price) }}</span>
         </div>
       </div>
     </div>

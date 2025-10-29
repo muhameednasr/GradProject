@@ -1,17 +1,21 @@
-import { OrderItemResponse } from './order-item';
+import { OrderItem, OrderItemResponse } from './order-item';
 
 export interface Order {
   id: number;
-  orderDate: string;
-  customerName: string;
-  cashierName: string;
-  captainName: string;
-  waiterName: string;
-  tableId: number;
-  area: string;
   status: string;
-  total: number;
-  items: OrderItemResponse[];
+  customerId: number;
+  customerName?: string;
+  cashierId: number;
+  cashierName?: string;
+  captainId: number;
+  captainName?: string;
+  waiterId: number;
+  waiterName?: string;
+  tableId: number;
+  area?: string;
+  date: Date;
+  orderItems: OrderItem[];
+  total?: number;
 }
 
 export interface CreateOrderRequest {
@@ -25,6 +29,5 @@ export interface CreateOrderRequest {
     itemId: number;
     quantity: number;
     sizeId: number;
-    isPayed?: boolean; // ADD THIS if you want pay functionality
   }>;
 }

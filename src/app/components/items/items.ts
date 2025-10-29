@@ -9,8 +9,6 @@ import { Item } from '../../models/item';
   templateUrl: './items.html',
   styleUrl: './items.css',
 })
-
-
 export class ItemsComponent implements OnInit {
   items: Item[] = [];
   loading = false;
@@ -20,6 +18,12 @@ export class ItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadItems();
+    this.itemService.getAll().subscribe({
+      next: (data) => {
+        console.log('Loaded items:', data);
+        this.items = data;
+      },
+    });
   }
 
   loadItems(): void {
@@ -34,7 +38,7 @@ export class ItemsComponent implements OnInit {
         this.error = 'Failed to load items. Make sure your API is running.';
         this.loading = false;
         console.error(err);
-      }
+      },
     });
   }
 }

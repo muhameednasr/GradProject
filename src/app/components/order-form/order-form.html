@@ -55,42 +55,46 @@
     </div>
 
     <div class="section">
-      <h3>Add Items</h3>
+      <h3>Available Items</h3>
       <div class="items-grid">
-        <div *ngFor="let item of items" class="item-select-card">
+        <div *ngFor="let item of items" class="item-card">
           <div class="item-info">
-            <span class="item-name">{{ item.name }}</span>
-            <span class="item-price">${{ item.price.toFixed(2) }}</span>
+            <span class="item-name">{{item.name}}</span>
+            <span class="item-price">{{item.price | currency}}</span>
+            <button type="button" (click)="addItem(+item.id)" class="btn-add" [disabled]="loading">
+              Add item
+            </button>
+
           </div>
-          <button type="button" (click)="addItem(item.id)" class="btn-add">
-            Add
-          </button>
         </div>
       </div>
     </div>
 
     <div *ngIf="tempOrderItems.length > 0" class="section">
-      <h3>Order Items ({{ tempOrderItems.length }})</h3>
+      <h3>Selected Items ({{ tempOrderItems.length }})</h3>
       <div class="selected-items">
-        <div *ngFor="let orderItem of tempOrderItems; let i = index" class="selected-item">
+        <div *ngFor="let orderItem of tempOrderItems; let i = index" class="order-item">
           <div class="item-details">
-            <span class="item-text">{{ getItemName(orderItem.itemId) }} x {{ orderItem.quantity }}</span>
+            <span class="item-name">{{getItemName(orderItem.itemId)}}</span>
+            <span class="item-subtotal">
+              {{ (orderItem.quantity * getItemPrice(orderItem.itemId)) | currency }}
+            </span>
           </div>
+          <div class="item-controls">
+            <input type="number" [(ngModel)]="orderItem.quantity" min="1" class="quantity-input"
+              [name]="'quantity-' + i">
 
-          <div class="form-group size-group">
-            <label [for]="'SizeId-' + i">Size *</label>
-            <select [id]="'SizeId-' + i" [(ngModel)]="orderItem.sizeId" [name]="'SizeId-' + i" required
-              class="form-control">
-              <option value="" disabled>--choose Size--</option>
+            <select [(ngModel)]="orderItem.sizeId" class="size-select" [name]="'size-' + i" required>
+              <option value="" disabled>Select Size</option>
               <option *ngFor="let size of availableSizes" [value]="size">
-                {{ getSizeLabel(size) }}
+                {{getSizeLabel(size)}}
               </option>
             </select>
-          </div>
 
-          <button type="button" (click)="removeItem(orderItem.itemId)" class="btn-remove" title="Remove item">
-            Remove
-          </button>
+            <button type="button" (click)="removeItem(orderItem.itemId)" class="btn-remove" [disabled]="loading">
+              Remove
+            </button>
+          </div>
         </div>
       </div>
     </div>
